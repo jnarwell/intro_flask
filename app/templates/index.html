@@ -1,19 +1,14 @@
 {% extends 'base.html' %}
-    {% block header %}
-        <h1>Hello World!</h1>
-        <h4>Welcome {{first_name}}</h4>
-        
-        {% if first_name == 'Jamie'%}
-            <h5>Hello</h5>
-        {% else %}
-            <h5>Goodbye</h5>
-        {% endif %}
 
-    {% endblock header %}
-    {% block content %}
-        <ul>
-            {% for country in countries %}
-                <li>{{ country }}</li>
-            {% endfor %}
-        </ul>
-    {% endblock content %}
+{% block title %} Home {% endblock title %}
+
+{% block header %}
+    <h1>Welcome to the Kekambas Blog</h1>
+    <h4>Please Sign Up or Log In to use the Blog</h4>
+{% endblock header %}
+
+{% block content %}
+    <div class="col-12">
+        <h5>Posts Go Here</h5>
+    </div>
+{% endblock content %}

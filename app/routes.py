@@ -1,12 +1,13 @@
 from app import app
 from flask import render_template
+from app.forms import SignUpForm
 
-#add a route
+# Add a route
 @app.route('/')
 def index():
-    countries = ['China', 'India', 'Canada']
-    return render_template('index.html', first_name='Jamie', countries = countries)
+    return render_template('index.html')
 
 @app.route('/signup')
 def signup():
-    return render_template('signup.html')
+    form = SignUpForm()
+    return render_template('signup.html', form=form)
