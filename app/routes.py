@@ -8,5 +8,5 @@ def index():
     return render_template('index.html', first_name='Jamie', countries = countries)
 
 @app.route('/signup')
-def new():
+def signup():
     return render_template('signup.html')
