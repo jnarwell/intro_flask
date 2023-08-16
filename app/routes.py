@@ -1,7 +1,8 @@
 from app import app, db
 from flask import render_template, redirect, url_for
-from app.forms import SignUpForm, PostForm
+from app.forms import SignUpForm, PostForm, LoginForm
 from app.models import User, Post
+from flask_login import login_user, logout_user, login_required, current_user
 
 # Add a route
 @app.route('/')
@@ -31,6 +32,9 @@ def signup():
         # Add the new_user object to the database
         db.session.add(new_user)
         db.session.commit()
+
+        # Log the user in
+        login_user(new_user)
         # redirect back to the home page
         return redirect(url_for('index'))
     
@@ -38,6 +42,7 @@ def signup():
 
 
 @app.route('/create', methods=["GET", "POST"])
+@login_required
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
@@ -48,10 +53,33 @@ def create_post():
         # print(title, body, image_url)
 
         # Create a new post instance
-        new_post = Post(title=title, body=body, image_url=image_url, user_id=1)
+        new_post = Post(title=title, body=body, image_url=image_url, user_id=current_user.id)
         # Add that object to the database
         db.session.add(new_post)
         db.session.commit()
 
         return redirect(url_for('index'))
     return render_template('create_post.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        # Query the User table for a user with that username
+        user = db.session.execute(db.select(User).where(User.username==username)).scalar()
+        # If we have a user AND the password is correct for that user
+        if user is not None and user.check_password(password):
+            # log the user in via login_user function
+            login_user(user)
+            return redirect(url_for('index'))
+            
+    return render_template('login.html', form=form)

@@ -4,7 +4,11 @@
 
 {% block header %}
     <h1>Welcome to the Kekambas Blog</h1>
-    <h4>Please Sign Up or Log In to use the Blog</h4>
+    {% if current_user.is_authenticated %}
+        <h4>Hello {{ current_user.first_name }}!</h4>
+    {% else %}
+        <h4>Please Sign Up or Log In to use the Blog</h4>
+    {% endif %}
 {% endblock header %}
 
 {% block content %}
@@ -20,7 +24,7 @@
                         <h5 class="card-title">{{ post.title }}</h5>
                         <h6 class="card-subtle">By: {{ post.author.username }}</h6>
                         <p class="card-text">{{ post.body }}</p>
-                        <p class="card-text"><small class="text-body-secondary">{{ post.date_created }}</small></p>
+                        <p class="card-text"><small class="text-body-secondary">{{ post.date_created.strftime('%A %b %d, %Y at %I:%M%p')  }}</small></p>
                         </div>
                     </div>
                 </div>
